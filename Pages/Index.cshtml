@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewData["Title"] = "Dashboard";
+    @model IndexModel
+    @using System.Text.Json;
+    @using System.Text.Json.Serialization;
+}
+@section Scripts{
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+    <script type="text/javascript">
+        var data = @JsonSerializer.Serialize(Model.DashboardModel.Chart.Values);
+        var labels = @Html.Raw(JsonSerializer.Serialize(Model.DashboardModel.Chart.Labels));
+    </script> 
+    <script type="text/javascript" src="~/js/doughnut.js"></script>
+}
+
+<div class="container-fluid">
+    <div>
+        <a role="button" class="btn btn-primary" arial_pressed="true" asp-page="Create">Create Issue</a>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-6">
+            @await Html.PartialAsync("_IssueTablePartial", Model.DashboardModel.Issues)
+        </div>
+
+        <div class="col-6" id="pie">
+            <canvas id="chart-area">
+        </div>
+    </div>
+</div>
+
+
+<!--
+    <table ondragover="allowDrop(event)" ondrop="drop(event)" class="table table-dark">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+
+</table>
+-->

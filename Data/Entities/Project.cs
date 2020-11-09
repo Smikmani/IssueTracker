@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
-namespace Project1.Data
+namespace Project1.Data.Entities
 {
     public class Project : BaseEntity
     {
@@ -15,6 +15,6 @@ namespace Project1.Data
         public string Description { get; set; }
         [Required]
         public int LeadId { get; set; }
-
+        public List<ProjectUsers> ProjectUsers { get; set; }
     }
 }

@@ -1,0 +1,15 @@
+﻿@model DoughnutChartModel;
+@{
+    @using System.Text.Json;
+}
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+<script type="text/javascript">
+    var data = @JsonSerializer.Serialize(Model.Values);
+     var labels = @Html.Raw(JsonSerializer.Serialize(Model.Labels));
+</script>
+<script type="text/javascript" src="~/js/doughnut.js"></script>
+
+
+<canvas id="chart-area">

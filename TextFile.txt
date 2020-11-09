@@ -1,0 +1,54 @@
+﻿PUT FORM IN CARD
+Notifications
+Image thumbnails https://youtu.be/6czpapfDu-c?t=2381
+number of all new issues add last 10 or 30 days
+number of issues marked as done in last 10 or 30 days
+responsive sidebar
+
+Manager and admins can add users to their teams and if a user is already assigned to a team then a requested can be made to the manager of that team
+to borrow that member
+
+TO LEARN:
+User Authentication
+Save images
+Stats View
+
+
+TEAM Page:
+Members
+Stats(Issues Done 30 Days,Activity,Percent per type)
+Assigned Issues
+Manager
+
+ISSUE page:
+Name
+Desc
+DateCreated
+DateEnded
+Type
+Status
+Comments
+Created By
+Assigned Sprint
+Assigned Team
+
+DASHBOAARD page:
+30 Recent Issues
+Sprints 30 Issues
+Top 3 Teams,Members?
+Stats(Issues Done,Activity,Percent per type)
+
+SPRINT page:
+Name
+Desc
+DateCreated
+DateEnded -- DateEnding
+Type
+Comments
+
+USER page:
+Pic
+Name
+Issues Atributed?
+Team
+AssignedManager

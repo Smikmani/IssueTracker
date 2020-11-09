@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System;
-namespace Project1.Data
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Project1.Data.Entities
 {
     public class Comment : BaseEntity
     {
@@ -11,7 +13,6 @@ namespace Project1.Data
         public int IssueId { get; set; }
         [Required]
         public int UserId { get; set; }
-        [Required]
-        public DateTime CreationDate { get; set; }
+        public string UserName { get; set; }
     }
 }

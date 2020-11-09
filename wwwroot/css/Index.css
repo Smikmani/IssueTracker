@@ -1,7 +1,195 @@
-﻿#pie {
-    width:500px;
+﻿html {
+    background-color: #f8f9fc;
+
+}
+body {
+    font-family: Poppins;
+    background-color: #F5F5F5;
+    min-height: 100%;
 }
 
-tr{
-    border-radius: 50px;
+#main-body {
+    background-color: #F5F5F5;
+}
+
+.pd {
+    color: black;
+    text-decoration: none;
+}
+
+.pd:hover {
+    color: black;
+    text-decoration: black;
+}
+
+/*Issue-Table*/
+
+
+.issue-table::-webkit-scrollbar {
+    width: 5px;
+}
+
+.issue-table::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.issue-table::-webkit-scrollbar-thumb {
+    background: #c0c1c2;
+    border-radius: 4px;
+}
+
+.issue-table::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.type-box {
+    
+    width: 19px;
+    height: 19px;
+    margin: auto;
+    display: inline-block;
+    border: 1px solid gray;
+    vertical-align: middle;
+    border-radius: 2px;
+}
+
+.issue-table{
+    overflow:scroll;
+    overflow-x:auto;
+}
+.issue-prop-names{
+    position:sticky;
+    top:0;
+    z-index:1;
+    background-color:white;
+    border-bottom:solid;
+}
+.issue-prop-name {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.issue-status{
+    font-weight:bold;
+}
+
+
+.issue-row:hover {
+    background-color: rgba(137, 137, 139, 0.1)
+}
+/*Dashboard*/
+.project-name{
+    margin-right: 40px;
+}
+
+.total-count-label {
+    color: gray;
+    font-size: 1.7em;
+    margin-right: 7px;
+}
+
+.total-count {
+    font-size: 1.7em;
+    margin-right: 10px;
+}
+
+.issue-count-head {
+    font-size: 1.5em;
+    margin-right: 10px;
+}
+
+.issue-count-dash {
+    margin-right: 10px;
+    font-size: 1.5em;
+}
+
+.dashboard-head {
+    background-color: white;
+    border: groove;
+    border-radius: 5px;
+    padding-left: 6px;
+    margin-bottom: 10px;
+}
+
+#chart-1 {
+    padding: 30px;
+    border: groove;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.pie-chart {
+    border: groove;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: white;
+}
+
+#issue-count {
+    position: absolute;
+    right: 2%;
+}
+
+/*Create*/
+
+.create-issue-buttton {
+    text-align: center;
+    margin-bottom: 0;
+    margin-top: 25px;
+}
+
+/*Issue*/
+
+.issue-field {
+    border: none !important;
+    background-color: transparent !important;
+}
+
+.issue-field:focus {
+    outline: none !important;
+    background-color: transparent;
+    border-bottom: 2px solid #969696;
+    background-color: transparent;
+
+}
+
+.issue-date {
+    border: none !important;
+    width: 155px !important;
+    padding-left: 0 !important;
+    background-color: transparent !important;
+}
+
+    .issue-date:focus {
+        outline: none !important;
+        width: 155px !important;
+        padding-left: 0 !important;
+        background-color: transparent !important;
+    }
+
+.issue-name {
+    width:  90%;
+
+}
+
+.issue-id {
+    padding-top: 8px;
+    margin-right: 10px;
+}
+
+.issue-user {
+
+}
+
+.issue-desc{
+    width: 100%;
+}
+
+.issue-comm{
+    border-radius: 5px;
+}
+
+.issue-comm-body{
+    color: black;
+    font-weight: 500;
 }

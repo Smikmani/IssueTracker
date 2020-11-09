@@ -5,6 +5,27 @@
     {
       "library": "twitter-bootstrap@4.3.1",
       "destination": "wwwroot/lib/twitter-bootstrap"
+    },
+    {
+      "library": "jquery@3.5.1",
+      "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "library": "font-awesome@5.14.0",
+      "destination": "wwwroot/lib/font-awesome/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "@ttskch/select2-bootstrap4-theme@1.3.4",
+      "destination": "wwwroot/lib/@ttskch/select2-bootstrap4-theme/"
+    },
+    {
+      "library": "startbootstrap-sb-admin-2@4.0.7",
+      "destination": "wwwroot/lib/startbootstrap-sb-admin-2/"
+    },
+    {
+      "library": "jquery-easing@1.4.1",
+      "destination": "wwwroot/lib/jquery-easing/"
     }
   ]
 }

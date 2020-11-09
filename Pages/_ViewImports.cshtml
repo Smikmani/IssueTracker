@@ -1,5 +1,8 @@
 @using Microsoft.AspNetCore.Identity
-@using Project1
 @using Project1.Data
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService authorizationService
+
+
 @namespace Project1.Pages
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

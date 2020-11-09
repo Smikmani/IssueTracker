@@ -1,5 +1,4 @@
 ﻿
-
 window.chartColors = {
 	red: '#808080',
 	orange: 'rgb(255, 159, 64)',
@@ -9,38 +8,35 @@ window.chartColors = {
 	purple: 'rgb(153, 102, 255)',
 	grey: 'rgb(201, 203, 207)'
 };
-var config = {
-	type: 'doughnut',
-	data: {
-		datasets: [{
-			data,
-			backgroundColor: [
-				window.chartColors.red,
-				window.chartColors.orange,
-				window.chartColors.yellow
-			],
-			label: 'Dataset 1'
-		}],
-		labels
-	},
-	options: {
-		responsive: true,
-		legend: {
-			position: 'top',
+
+function getPieChart(chartId, chartTitle, colors, data, labels) {
+	
+	var ctx = document.getElementById(chartId).getContext('2d');
+
+	var config = {
+		type: 'doughnut',
+		data: {
+			datasets: [{
+				data,
+				backgroundColor: colors,
+				label: 'Dataset 1'
+			}],
+			labels
 		},
-		title: {
-			display: true,
-			text: 'Issue Types'
-		},
-		animation: {
-			animateScale: true,
-			animateRotate: true
+		options: {
+			responsive: true,
+			legend: {
+				display : false
+			},
+			title: {
+				display: false
+			},
+			animation: {
+				animateScale: true,
+				animateRotate: true
+			}
 		}
-	}
-};
+	};
 
-window.onload = function () {
-	var ctx = document.getElementById('chart-area').getContext('2d');
-	window.myDoughnut = new Chart(ctx, config);
-};
-
+	var chart = new Chart(ctx, config);
+}

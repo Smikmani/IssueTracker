@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Project1.Data.Entities;
 
 namespace Project1.Data
 {
-    public class EfRepository : IIssueRepository
+    public class EfRepository<T> : IRepository<T> where T : BaseEntity
     {
         private ApplicationDbContext context;
 
@@ -17,58 +18,41 @@ namespace Project1.Data
             context = ctx;
         }
 
-        /*
-         * ISSUE REPOSITORY
-         */
-        public async Task<IReadOnlyList<Issue>> ListAllIssuesAsync()
-        {
-            return await context.Set<Issue>().ToListAsync();
-        }
-
-        public async Task<Issue> GetIssueByIdAsync(int id)
-        {
-            return await context.Set<Issue>().FindAsync(id);
-        }
-
-        public async Task AddIssueAsync(Issue issue)
-        {
-            await context.Set<Issue>().AddAsync(issue);
-            await context.SaveChangesAsync();
-        }
-
-        public async Task UpdateIssueAsync(int id ,Issue issue)
-        {
-            if (id != issue.Id)
-            {
-                return ;
-            }
-            context.Entry(issue).State = EntityState.Modified;
-            await context.SaveChangesAsync();
-        }
-
-        public async Task DeleteIssueAsync(int id)
-        {
-            var issue = await context.Set<Issue>().FindAsync(id);
-            if (issue == null)
-            {
-                return ;
-            }
-            context.Set<Issue>().Remove(issue);
-            await context.SaveChangesAsync();
-        }
-
         
-        /*
-         * SPRINT REPOSITORY
-         
-        public async Task<IReadOnlyList<Sprint>> ListAllSprintsAsync()
+        public async Task<IReadOnlyList<T>> ListAllAsync(int Id)
         {
-            return await context.Set<Sprint>().ToListAsync();
+            
+            return await context.Set<T>().ToListAsync();
         }
 
-        public async Task<Sprint> GetSprintByIdAsync(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
-            return await context.Set<Sprint>().FindAsync(id);
-        }*/
+            return await context.Set<T>().FindAsync(id);
+        }
+
+        public async Task AddAsync(T entity)
+        {
+            await context.Set<T>().AddAsync(entity);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(T entity)
+        {
+            
+            context.Entry(entity).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(T entity)
+        {
+            context.Set<T>().Remove(entity);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<int> CountAsync()
+        {
+            return await context.Set<T>().CountAsync();
+        }
+
     }
 }

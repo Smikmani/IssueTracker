@@ -1,5 +1,6 @@
-﻿
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Project1.Data.Entities;
+using System.Collections.Generic;
 
 namespace Project1.Data
 {
@@ -10,6 +11,7 @@ namespace Project1.Data
         [PersonalData]
         public string LastName { get; set; }
         public int TeamId { get; set; }
-
+        public int JobRoleId { get; set; }
+        public List<ProjectUsers> ProjectUsers { get; set; }
     }
 }

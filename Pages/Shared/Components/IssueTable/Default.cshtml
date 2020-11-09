@@ -1,0 +1,56 @@
+﻿@model IReadOnlyList<IssueTableViewModel>
+<!--<div class="container-fluid">
+        <table class="row table-hover" >
+            <thead>
+
+            </thead>
+            <tbody class="container">
+
+
+                }
+            </tbody>
+        </table>
+    </div>-->
+
+        <div class="container-fluid issue-table" style="height:500px;">
+            <div class="row mb-2 issue-prop-names">
+                <div class="-name" style="margin-left:19px;">
+                </div>
+                <div class="col-5 issue-prop-name">
+                    <span>Name</span>
+                </div>
+                <div class="col-3 issue-prop-name">
+                    <span>Status</span>
+                </div>
+                <div class="col-3 issue-prop-name">
+                    <span>Created</span>
+                </div>
+                <!--<div class="col-2 issue-prop-name">
+                    <span>User</span>
+                </div>-->
+            </div>
+            @foreach (var i in Model)
+            {
+                <a asp-area="" asp-page="/Issue" asp-route-id="@i.Id" class="pd">
+                    <div class="row shadow-sm rounded issue-row mb-1">
+                        <div class="issue-type pt-1 pb-1">
+                            <span class="type-box " title="@i.Type.Name" style="background:@i.Type.Color"></span>
+                        </div>
+                        <div class="col-5 issue-name">
+                            <span>@i.Name</span>
+                        </div>
+                        <div class="col-3 issue-status " style="color:@i.Status.Color;">
+                            <span>@i.Status.Name</span>
+                        </div>
+                        <div class="col-3 issue-date">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <span>@i.Created</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+    

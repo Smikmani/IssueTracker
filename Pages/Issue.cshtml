@@ -1,66 +1,141 @@
 ﻿@page
 @model Project1.IssueModel
 @{
-    ViewData["Title"] = "Issue #" + Model.issueVM.Issue.Id;
+    if (Model.issueVM.Issue == null)
+    {
+        ViewData["Title"] = "Issue Not Found" ;
+    }
+    else
+    {
+        ViewData["Title"] = "Issue #" + Model.issueVM.Issue.Id;
+    }
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        var issue =  @Html.Raw(Model.JsonIssue);
+    </script>
+    <script type="text/javascript" src="~/js/issue.js"></script>
+
+}
+@if( Model.issueVM.Issue==null){
     <div class=" container-fluid">
         <div class="row mb-3">
-            <span class="h4 d-flex align-items-center issue-id font-italic">#@Model.issueVM.Issue.Id</span>
-            <input type="text" name="Name" value="@Model.issueVM.Issue.Name" spellcheck="false" class="h1 issue-field issue-name" />
+            <h1>This issue does not exist or it has been deleted :(</h1>
         </div>
-        <div class="row">
-            <div class="col-6">
-                <div class=" card border-left-info  shadow ">
-                    <div class="card-header font-weight-bold">
-                        Details
+    </div>
+    return;
+}
+<div class=" container-fluid">
+    <div class="row mb-3">
+        <span class="h4 d-flex align-items-center issue-id font-italic">#@Model.issueVM.Issue.Id</span>
+        <input type="text" name="Name" asp-for="@Model.issueVM.Issue.Name" spellcheck="false" class="h1 issue-field" id="issue-name" onfocusout="NameUpdateHandler(event)" />
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class=" card border-left-info  shadow ">
+                <div class="card-header font-weight-bold">
+                    Details
+                </div>
+                <div class="card-body d-flex flex-row pt-2 pb-2">
+                    <div class="form-group mr-2 mb-0" style="width:25%">
+                        <label asp-for="@Model.issueVM.Issue.Type" class="text-xs text-uppercase control-label font-weight-bold mb-0 text-info"></label>
+                        <div class="dropdown no-arrow ">
+                            <button id="type-btn" class="btn  dropdown-toggle  pt-0 pl-0" type="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #6e707e;">
+                                <span id="issue-type-id" hidden>@Model.issueVM.Issue.Type.Id</span>
+                                <span id="issue-type-box" class="type-box " title="@Model.issueVM.Issue.Type.Name" style="background:@Model.issueVM.Issue.Type.Color"></span>
+                                <span id="issue-type-name" class="ml-1 text-left font-weight-bold issue-field align-middle">@Model.issueVM.Issue.Type.Name</span>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
+                                @foreach(var t in Model.issueVM.Types) {
+                                    if (t.Id == Model.issueVM.Issue.TypeId) continue;
+                                    <a class="dropdown-item " onclick="TypeUpdateHandler(event)" id="@t.Id-type">
+                                        <span class="type-box " title="@t.Name" style="background:@t.Color"></span>
+                                        <span class="ml-1  text-left font-weight-bold issue-field align-middle"  style="color: #6e707e;">@t.Name</span>
+                                    </a>
+                                 }
+
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body d-flex flex-row">
-                        <div class="form-group mr-2 mb-0" style="width:25%">
-                            <label asp-for="@Model.issueVM.Issue.Type" class="text-xs text-uppercase control-label font-weight-bold mb-0 text-info"></label>
-                            <input name="Name" value="Backend Bug" type="text" spellcheck="false" class="form-control font-weight-bold issue-field pt-0 pl-0" />
+                    <div class="form-group mr-2 mb-0" style="width:25%">
+                        <label asp-for="@Model.issueVM.Issue.Status" class="text-xs text-uppercase control-label font-weight-bold mb-0 text-info"></label>
+                        <div class="dropdown no-arrow ">
+                            <button id="type-btn" class="btn  dropdown-toggle  pt-0 pl-0" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #6e707e;">
+                                <span id="issue-status-id" hidden>@Model.issueVM.Issue.Status.Id</span>
+                                <span id="issue-status-box" class="type-box " title="@Model.issueVM.Issue.Status.Name" style="background:@Model.issueVM.Issue.Status.Color"></span>
+                                <span id="issue-status-name" class="ml-1 text-left font-weight-bold issue-field align-middle">@Model.issueVM.Issue.Status.Name</span>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
+                                @foreach (var s in Model.issueVM.Status)
+                                {
+                                    if (s.Id == Model.issueVM.Issue.StatusId) continue;
+                                    <a class="dropdown-item " onclick="StatusUpdateHandler(event)" id="@s.Id-status">
+                                        <span class="type-box " title="@s.Name" style="background:@s.Color"></span>
+                                        <span class="ml-1  text-left font-weight-bold issue-field align-middle" style="color: #6e707e;">@s.Name</span>
+                                    </a>
+                                }
+
+                            </div>
                         </div>
-                        <div class="form-group mr-2 mb-0" style="width:25%">
-                            <label asp-for="@Model.issueVM.Issue.Status" class="text-xs text-uppercase control-label font-weight-bold mb-0 text-info"></label>
-                            <input name="Name" value="Open" type="text" spellcheck="false" class="form-control font-weight-bold issue-field pt-0 pl-0" />
-                        </div>
-                        <div class="form-group mr-2 mb-0" style="width:25%">
-                            <label asp-for="@Model.issueVM.Issue.DueDate" class="text-xs text-uppercase control-label font-weight-bold mb-0 text-info"></label>
-                            <input name="Name" value="@Model.issueVM.Issue.DueDate?.ToString("yyyy-MM-dd")" type="date" spellcheck="false" class="form-control font-weight-bold pt-0 issue-date" />
-                        </div>
-                        <div class="form-group mr-2 ml-3 mb-0" style="width:25%">
-                            <label class="control-label text-xs text-uppercase font-weight-bold mb-0 pl-0 text-info">Submited By</label>
-                            <input name="User" value="Tasos #321" type="text" spellcheck="false" class="form-control font-weight-bold issue-field issue-user pt-0 pl-0" disabled />
-                        </div>
+                    </div>
+                    <div class="form-group mr-2 mb-0" style="width:25%">
+
+                        <label asp-for="@Model.issueVM.Issue.DueDate" class="text-xs text-uppercase control-label font-weight-bold mb-0 text-info"></label>
+                        <input name="DueDate" id="DueDate" value="@Model.issueVM.Issue.DueDate?.ToString("yyyy-MM-dd")" type="date" spellcheck="false" class="form-control font-weight-bold pt-0 issue-date" onchange="DueDateUpdateHandler(event)"/>
+                    </div>
+                    <div class="form-group mr-2 ml-3 mb-0" style="width:25%">
+                        <label class="control-label text-xs text-uppercase font-weight-bold mb-0 pl-0 text-info">Submited By</label>
+                        <input name="User" id="User" value="Tasos #321" type="text" spellcheck="false" class="form-control font-weight-bold issue-field issue-user pt-0 pl-0" disabled />
                     </div>
                 </div>
-                <div class=" card border-left-info mt-3 shadow ">
-                    <div class="card-header font-weight-bold">
-                        Desciption
-                    </div>
-                    <div class="card-body d-flex flex-row">
-                        <span class="input issue-desc"
+            </div>
+            <div class=" card border-left-info mt-3 shadow ">
+                <div class="card-header font-weight-bold">
+                    Desciption
+                </div>
+                <div class="card-body d-flex flex-row">
+                    <span class="input"
+                          id="issue-desc"
+                          role="textbox"
+                          onfocusout="DescUpdateHandler(event)"
+                          contenteditable>
+                        @Model.issueVM.Issue.Description
+                    </span>
+                </div>
+            </div>
+            <div class=" card border-left-info shadow mt-3 ">
+                <div class="card-header font-weight-bold">
+                    Comments
+                </div>
+                <div class="card-body issue-comms-card">
+                    <div class="input-group mb-3">
+                        <span class="input form-control"
+                              id="issue-comm"
                               role="textbox"
+                              style="height:100%;"
                               contenteditable>
-                            @Model.issueVM.Issue.Description
                         </span>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" onclick="CommentPost(event)">Button</button>
+                        </div>
                     </div>
-                </div>
-                <div class=" card border-left-info mt-3 shadow ">
-                    <div class="card-header font-weight-bold">
-                        Comments
-                    </div>
-                    <div class="card-body">
+                    <div id="comm-section">
                         @foreach (var c in Model.issueVM.Issue.Comments)
                         {
-                            <div class="issue-comm border mb-3 ">
+                            <div class="issue-comm border mb-3 " id="@c.Id">
                                 <div class="d-flex flex-row mb-2 p-2 border-bottom">
                                     <span class="mr-1 font-weight-bold">By: </span>
                                     <span class="issue-comm-userid  mr-1">#@c.UserId</span>
                                     <span class="issue-comm-username mr-auto">@c.UserName</span>
-                                    <span class="mr-1 font-weight-bold" >At: </span>
+                                    <span class="mr-1 font-weight-bold">At: </span>
                                     <span class="issue-comm-created ">@c.CreationDate</span>
+                                    @if (c.UserId == Model.issueVM.UserId)
+                                    {
+                                        <button class="btn btn-danger btn-sm ml-2" onclick="deleteComment(@c.Id)"><i class="far fa-trash-alt fa-sm"></i></button>
+                                    }
                                 </div>
                                 <div class="mb-2 p-2 pl-4">
                                     <span class="input issue-comm-body "
@@ -70,21 +145,106 @@
                                     </span>
                                 </div>
                             </div>
-                         }
-
+                        }
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class=" card border-left-info shadow ">
+                <div class="card-header font-weight-bold">
+                    Change Log
+                </div>
+                <div class="card-body issue-comms-card">
+                    <div id="change-section">
+                        @foreach (var c in Model.issueVM.Issue.Changes)
+                        {
+                            <div class="issue-comm border mb-3 ">
+                                <div class="d-flex flex-row mb-2 p-2 border-bottom">
+                                    <span class="mr-1 font-weight-bold">@c.Property</span>
+                                    <span class="issue-comm-username mr-auto"></span>
+                                    <span class="mr-1 font-weight-bold">At: </span>
+                                    <span class="issue-comm-created ">@c.CreationDate</span>
+                                </div>
+                                <div class="d-flex justify-content-between ">
+                                    <div class="mb-2 p-2 pl-4">
+                                        <span class="input issue-comm-body "
+                                              role="textbox"
+                                              spellcheck="false">
+                                            @c.Before
+                                        </span>
+                                    </div>
+                                    <i class="fas fa-long-arrow-alt-right my-auto"></i>
+                                    <div class="mb-2 p-2 pl-4">
+                                        <span class="input issue-comm-body "
+                                              role="textbox"
+                                              spellcheck="false">
+                                            @c.After
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
-            <div class="col-6">
-                
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-6">
-                
-            </div>
-            <div class="col-6">
+            <form class="mt-4" enctype="multipart/form-data" onsubmit="postFile(this);return false;"
+                  method="post">
+                <div class="form-group">
+                    <label for="FileUpload_FormFile">File</label>
+                    <input id="FileUpload_FormFile" type="file"
+                           name="FileUpload.FormFile" />
+                    <button class="btn btn-info" type="submit">Upload</button>
+                </div>
+               <div style="margin-top:15px">
+                    <output name="result"></output>
+                </div>
+            </form>
+            <div id="files-section">
 
+                @if (Model.issueVM.Issue.Files == null)
+                {
+                    <span>No Fille Attached</span>
+                }
+                @foreach (var file in Model.issueVM.Issue.Files)
+                {
+                    var ext = file.Uri.Substring(file.Uri.LastIndexOf('.') + 1).ToUpperInvariant();
+                    <div class="d-flex flex-row file mb-1" id="file-@file.Id">
+                        <a class="pd" href="@file.Uri" download>
+                            @if (ext.StartsWith("D"))
+                            {
+                                <span><i class="fas fa-file-word mr-3"></i>@file.Uri.Substring(file.Uri.LastIndexOf('/') + 1)</span>
+                            }
+                            else if (ext.StartsWith("T"))
+                            {
+                                <span><i class="fas fa-file-alt mr-3"></i>@file.Uri.Substring(file.Uri.LastIndexOf('/') + 1)</span>
+                            }
+                            else if (ext.StartsWith("PD"))
+                            {
+                                <span class="file"><i class="fas fa-file-pdf mr-3"></i>@file.Uri.Substring(file.Uri.LastIndexOf('/') + 1)</span>
+                            }
+                            else if (ext.StartsWith("P") || ext.StartsWith("J"))
+                            {
+                                <span class="file"><i class="fas fa-file-image mr-3"></i>@file.Uri.Substring(file.Uri.LastIndexOf('/') + 1)</span>
+                            }
+                            else if (ext.StartsWith("X") || ext.StartsWith("C"))
+                            {
+                                <span class="file"><i class="fas fa-file-excel mr-3"></i>@file.Uri.Substring(file.Uri.LastIndexOf('/') + 1)</span>
+                            }
+                        </a>
+                        <button class="ml-auto btn btn-danger" onclick="deleteFile(@file.Id)"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                }
             </div>
+                    </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+
+        </div>
+        <div class="col-6">
+
         </div>
     </div>
+</div>

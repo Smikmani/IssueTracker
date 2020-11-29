@@ -9,6 +9,7 @@ namespace Project1.ViewModel.Issues
 {
     public class IssueViewModel
     {
+        public int UserId { get; set; }
         public Issue Issue { get; set; }
         public List<SelectItem> Types { get; set; }
         public List<SelectItem> Status { get; set; }

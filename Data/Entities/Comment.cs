@@ -9,9 +9,7 @@ namespace Project1.Data.Entities
         [Required]
         [StringLength(300)]
         public string Body { get; set; }
-        [Required]
         public int IssueId { get; set; }
-        [Required]
         public int UserId { get; set; }
         public string UserName { get; set; }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Project1.Data.Entities
 {
@@ -24,8 +25,12 @@ namespace Project1.Data.Entities
         public int ProjectId { get; set; }
         [Display(Name="Due Date")]
         public DateTime? DueDate { get; set; }
+        [JsonIgnore]
         public List<Comment> Comments { get; set; }
+        [JsonIgnore]
         public List<Change> Changes { get; set; }
+        [JsonIgnore]
+        public List<FileDetails> Files { get; set; }
         //public int AssignedUserId { get; set; }
     }
 }

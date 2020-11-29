@@ -70,7 +70,7 @@ namespace Project1.Services
         {
 
             var averageIssueAdded = await _ctx.Issues
-                                              .Where(i => (i.ProjectId == ProjectId) && (i.CreationDate <= FilterDate))
+                                              .Where(i => (i.ProjectId == ProjectId) && (i.CreationDate >= FilterDate))
                                               .CountAsync();
             return (float)averageIssueAdded;
         }
@@ -78,7 +78,7 @@ namespace Project1.Services
         private async Task<float> GetAverageIssuesClosed(DateTime FilterDate)
         {
             var averageIssueClosed = await _ctx.Issues
-                                               .Where(i => (i.ProjectId == ProjectId) && (i.UpdateDate <= FilterDate) && (i.StatusId == 6))
+                                               .Where(i => (i.ProjectId == ProjectId) && (i.UpdateDate >= FilterDate) && (i.StatusId == 6))
                                                .CountAsync() ;
 
             return (float)averageIssueClosed ;
@@ -91,18 +91,33 @@ namespace Project1.Services
             var values = new List<int>();
             var colors = new List<string>();
 
-            var issueGroups = await _ctx.Types
-                                        .Where(t => t.ProjectId == ProjectId)
-                                        .Include(t => t.Issues)
-                                        .Select(group => new { Key = group.Name, Count = group.Issues.Count(), Color = group.Color })
+            var issueGroups = await _ctx.Issues
+                                        .Include(i => i.Type)
+                                        .Where(i => i.ProjectId == ProjectId)
+                                        .GroupBy(i => i.TypeId)
+                                        .Select(group => new { Key = group.Key, Count = group.Count() })
                                         .ToListAsync();
 
-            foreach (var group in issueGroups)
+            var types = await _ctx.Types
+                                    .Where(t => t.ProjectId == ProjectId || t.ProjectId == 0)
+                                    .Select(t => new {t.Id, t.Name, t.Color })
+                                    .ToListAsync();
+
+
+           foreach (var group in issueGroups)
             {
-                if (group.Count==0) continue;
-                labels.Add(group.Key);
-                values.Add(group.Count);
-                colors.Add(group.Color);
+                foreach (var type in types)
+                {
+                    if (group.Count==0) continue;
+                    if(type.Id == group.Key)
+                    {
+                        labels.Add(type.Name);
+                        values.Add(group.Count);
+                        colors.Add(type.Color);
+                    }
+                    
+                }
+                
             }
 
             pieChart.Labels = labels;
@@ -119,17 +134,31 @@ namespace Project1.Services
             var values = new List<int>();
             var colors = new List<string>();
 
-            var issueGroups = await _ctx.Status
-                                        .Where(s => s.ProjectId == ProjectId)
-                                        .Include(s => s.Issues)
-                                        .Select(group => new { Key = group.Name, Count = group.Issues.Count(), Color = group.Color })
+            var issueGroups = await _ctx.Issues
+                                        .Include(i => i.Status)
+                                        .Where(i => i.ProjectId == ProjectId)
+                                        .GroupBy(i => i.StatusId)
+                                        .Select(group => new { Key = group.Key, Count = group.Count() })
                                         .ToListAsync();
+            var status = await _ctx.Status
+                                    .Where(t => t.ProjectId == ProjectId || t.ProjectId == 0)
+                                    .Select(s => new { s.Id, s.Name, s.Color })
+                                    .ToListAsync();
 
             foreach (var group in issueGroups)
             {
-                labels.Add(group.Key);
-                values.Add(group.Count);
-                colors.Add(group.Color);
+                foreach (var st in status)
+                {
+                    if (group.Count == 0) continue;
+                    if (st.Id == group.Key)
+                    {
+                        labels.Add(st.Name);
+                        values.Add(group.Count);
+                        colors.Add(st.Color);
+                    }
+
+                }
+
             }
 
             pieChart.Labels = labels;

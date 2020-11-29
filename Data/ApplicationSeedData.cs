@@ -22,7 +22,7 @@ namespace Project1.Data
         {
             if(context.Database.GetPendingMigrations().Any()) context.Database.Migrate();
             
-            if (!context.Issues.Any() || !context.Comments.Any())
+            if (!context.Changes.Any())
             {
 
                 if (!await context.Projects.AnyAsync())
@@ -64,8 +64,13 @@ namespace Project1.Data
                     await context.Comments.AddRangeAsync(GetPreconfiguredComms());
 
                     await context.SaveChangesAsync();
-                }
-                //change log on issues
+                };
+                if (!await context.Changes.AnyAsync())
+                {
+                    await context.Changes.AddRangeAsync(GetPreconfiguredChanges());
+
+                    await context.SaveChangesAsync();
+                };
 
                 await context.SaveChangesAsync();
             }
@@ -135,7 +140,17 @@ namespace Project1.Data
                 new Comment { Body = "Waiting for Backend", IssueId = 30, UserId = 2, UserName = "User2" }
             };
         }
-
+        static IEnumerable<Change> GetPreconfiguredChanges()
+        {
+            return new List<Change>
+            {
+                new Change {  IssueId=30, Property = "Status", Before ="To Do", After ="Stuck", UserId = 2, UserName="User2"},
+                new Change {  IssueId=30, Property = "Type",   Before ="Bug", After ="Task", UserId = 2, UserName="User2"},
+                new Change {  IssueId=30, Property = "Description", Before ="Old description. Lorem ipsum dolor sit amet er.Lorem ipsum dolor sit.", After ="Lorem ipsum dolor sit amet er.Lorem ipsum dolor sit.", UserId = 2, UserName="User2"},
+                new Change {  IssueId=30, Property = "Name", Before ="Make nav bar Responsive", After ="Make navigation responsive", UserId = 2, UserName="User2"},
+                new Change {  IssueId=30, Property = "Team", Before ="Back-end Team", After ="Front-End Team", UserId = 2, UserName="User2"},
+            };
+        }
         static IEnumerable<Issue> GetPreconfiguredIssues()
         {
             return new List<Issue>

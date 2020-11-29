@@ -6,5 +6,7 @@
         public string Before { get; set; }
         public string After { get; set; }
         public int UserId { get; set; }
+        public string UserName { get; set; }
+        public int IssueId { get; set; }
     }
 }

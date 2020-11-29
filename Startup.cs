@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace Project1
 {
@@ -85,6 +86,13 @@ namespace Project1
             services.AddScoped<ICreateViewModelService, CreateViewModelService>();
             services.AddScoped<IIssueViewModelService, IssueViewModelService>();
 
+            services.Configure<FormOptions>(options =>
+            {
+                options.ValueLengthLimit = 50500000;
+                options.MultipartBodyLengthLimit = int.MaxValue;
+                options.MemoryBufferThreshold = int.MaxValue;
+            });
+
             services.AddRazorPages()
                     .AddSessionStateTempDataProvider();
             services.AddControllers();
@@ -106,7 +114,7 @@ namespace Project1
                 app.UseHsts();
             }
 
-            //app.UseDefaultFiles();
+            app.UseDefaultFiles();
             app.UseStaticFiles();
             
             app.UseRouting();

@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+using System.Text.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,6 +15,5 @@ namespace Project1.Data.Entities
         [Required]
         public string Color { get; set; }
         public int ProjectId { get; set; }
-        public List<Issue> Issues { get; set; }
     }
 }

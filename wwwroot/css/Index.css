@@ -167,9 +167,8 @@ body {
         background-color: transparent !important;
     }
 
-.issue-name {
+#issue-name {
     width:  90%;
-
 }
 
 .issue-id {
@@ -181,7 +180,7 @@ body {
 
 }
 
-.issue-desc{
+#issue-desc{
     width: 100%;
 }
 
@@ -192,4 +191,13 @@ body {
 .issue-comm-body{
     color: black;
     font-weight: 500;
+}
+
+.issue-comms-card{
+    height: 400px;
+    overflow: auto;
+}
+
+.file{
+    font-size: 1.7em;
 }

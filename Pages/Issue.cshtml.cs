@@ -8,6 +8,8 @@ using Project1.Data;
 using Project1.Data.Entities;
 using Project1.Interfaces;
 using Project1.ViewModel.Issues;
+using System.Text.Json;
+
 
 namespace Project1
 {
@@ -19,9 +21,17 @@ namespace Project1
             _issueVMService = issueVMService;
         }
         public IssueViewModel issueVM { get; set; }
+        public string JsonIssue { get; set; }
         public async Task OnGetAsync(int id)
         {
-            issueVM = await _issueVMService.GetIssueViewModel(id); 
+            issueVM = await _issueVMService.GetIssueViewModel(id);
+
+
+            if(issueVM.Issue?.Comments != null) issueVM.Issue.Comments.Reverse();
+            if (issueVM.Issue?.Changes != null)  issueVM.Issue.Changes.Reverse();
+            if (issueVM.Issue?.Files != null)  issueVM.Issue.Files.Reverse();
+            
+            JsonIssue = JsonSerializer.Serialize(issueVM.Issue);
         }
     }
 }

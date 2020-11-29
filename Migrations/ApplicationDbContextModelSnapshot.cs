@@ -15,7 +15,7 @@ namespace Project1.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.5")
+                .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -244,7 +244,7 @@ namespace Project1.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("IssueId")
+                    b.Property<int>("IssueId")
                         .HasColumnType("int");
 
                     b.Property<string>("Property")
@@ -256,11 +256,14 @@ namespace Project1.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IssueId");
 
-                    b.ToTable("Change");
+                    b.ToTable("Changes");
                 });
 
             modelBuilder.Entity("Project1.Data.Entities.Comment", b =>
@@ -295,6 +298,35 @@ namespace Project1.Migrations
                     b.HasIndex("IssueId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("Project1.Data.Entities.FileDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IssueId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Uri")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IssueId");
+
+                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("Project1.Data.Entities.Issue", b =>
@@ -534,7 +566,9 @@ namespace Project1.Migrations
                 {
                     b.HasOne("Project1.Data.Entities.Issue", null)
                         .WithMany("Changes")
-                        .HasForeignKey("IssueId");
+                        .HasForeignKey("IssueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Project1.Data.Entities.Comment", b =>
@@ -546,16 +580,25 @@ namespace Project1.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Project1.Data.Entities.FileDetails", b =>
+                {
+                    b.HasOne("Project1.Data.Entities.Issue", null)
+                        .WithMany("Files")
+                        .HasForeignKey("IssueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Project1.Data.Entities.Issue", b =>
                 {
                     b.HasOne("Project1.Data.Entities.Status", "Status")
-                        .WithMany("Issues")
+                        .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Project1.Data.Entities.Types", "Type")
-                        .WithMany("Issues")
+                        .WithMany()
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

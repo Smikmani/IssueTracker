@@ -34,7 +34,8 @@ namespace Project1.Data
         public DbSet<Project> Projects { get; set; }
         public DbSet<ProjectUsers> ProjectUsers { get; set; }
         public DbSet<Team> Teams { get; set; }
-        // DbSet<Change> Changes { get; set; }
+        public DbSet<Change> Changes { get; set; }
+        public DbSet<FileDetails> Files { get; set; }
 
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

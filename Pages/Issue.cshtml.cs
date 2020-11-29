@@ -26,7 +26,6 @@ namespace Project1
         {
             issueVM = await _issueVMService.GetIssueViewModel(id);
 
-
             if(issueVM.Issue?.Comments != null) issueVM.Issue.Comments.Reverse();
             if (issueVM.Issue?.Changes != null)  issueVM.Issue.Changes.Reverse();
             if (issueVM.Issue?.Files != null)  issueVM.Issue.Files.Reverse();

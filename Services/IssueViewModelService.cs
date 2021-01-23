@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -21,7 +20,6 @@ namespace Project1.Services
         private readonly IHttpContextAccessor _httpCtxAccessor;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IDistributedCache _cache;
-        private static readonly TimeSpan _defaultCacheDuration = TimeSpan.FromSeconds(30);
 
         public IssueViewModelService(ApplicationDbContext  ctx, 
                                      IHttpContextAccessor httpCtxAccessor,
@@ -44,7 +42,7 @@ namespace Project1.Services
             issueVM.Issue = await GetIssue(issueId);
             issueVM.Types = await GetTypesSelectItems();
             issueVM.Status = await GetStatusSelectItems();
-            issueVM.Teams = await GetTeamsSelectItems();
+            //issueVM.Teams = await GetTeamsSelectItems();
             issueVM.UserId = await GetUserId();
 
             return issueVM;
@@ -52,28 +50,30 @@ namespace Project1.Services
 
         public async Task<Issue> GetIssue(int issueId)
         {
-            
-            return await _ctx.Issues.Where(i =>  i.Id == issueId && i.ProjectId == ProjectId)
-                                    .Include(i => i.Type)
+            return await _ctx.Issues.Include(i => i.Type)
                                     .Include(i => i.Status)
                                     .Include(i => i.Comments)
                                     .Include(i => i.Changes)
                                     .Include(i => i.Files)
+                                    .Where(i =>  i.Id == issueId && i.ProjectId == ProjectId)
+                                    .AsNoTracking()
                                     .FirstOrDefaultAsync();
+          
         }
 
         public async Task<List<SelectItem>> GetStatusSelectItems()
         {
-            var statusItems = _cache.Get<List<SelectItem>>($"s{ProjectId}");
+            var statusItems = _cache.Get<List<SelectItem>>($"S{ProjectId}");
             
             if (statusItems == null)
             {
-                statusItems = await _ctx.Status
+                statusItems =   await _ctx.Status
                              .Where(s => (s.ProjectId == ProjectId) || (s.ProjectId == 0))
                              .Select(s => new SelectItem { Id = s.Id, Name = s.Name, Color = s.Color })
+                             .AsNoTracking()
                              .ToListAsync();
 
-                _cache.Set<List<SelectItem>>($"s{ProjectId}", statusItems);
+                _cache.Set<List<SelectItem>>($"S{ProjectId}", statusItems);
             }
 
             return statusItems;
@@ -81,10 +81,10 @@ namespace Project1.Services
 
         public async Task<List<SelectItem>> GetTeamsSelectItems()
         {
-            
             var teamsItems = await _ctx.Teams
                                        .Where(t => (t.ProjectId == ProjectId))
                                        .Select(t => new SelectItem { Id = t.Id, Name = t.Name })
+                                       .AsNoTracking()
                                        .ToListAsync();
 
             return teamsItems;
@@ -92,18 +92,18 @@ namespace Project1.Services
 
         public async Task<List<SelectItem>> GetTypesSelectItems()
         {
-            var typeItems = _cache.Get <List<SelectItem>>($"t{ProjectId}");
+            var typeItems = _cache.Get <List<SelectItem>>($"T{ProjectId}");
+
             if(typeItems == null)
             {
                 typeItems = await _ctx.Types
                                       .Where(t => (t.ProjectId == ProjectId) || (t.ProjectId == 0))
                                       .Select(t => new SelectItem { Id = t.Id, Name = t.Name, Color = t.Color })
+                                      .AsNoTracking()
                                       .ToListAsync();
 
-                _cache.Set<List<SelectItem>>($"t{ProjectId}", typeItems);
-
+                _cache.Set<List<SelectItem>>($"T{ProjectId}", typeItems);
             }
-
 
             return typeItems;
         }
@@ -116,6 +116,5 @@ namespace Project1.Services
 
             return userId;
         }
-        //public 
     }
 }

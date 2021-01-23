@@ -1,4 +1,5 @@
-﻿
+﻿import { updateDropdown } from './shared.js'
+
 var uri = 'api/Issues';
 
 function NameUpdateHandler(event) {
@@ -85,19 +86,9 @@ function TypeUpdateHandler(event) {
         })
         .then(data => {
             if (data == null) return;
+            updateDropdown(id,"type");
+
             postChange(data);
-
-            var newTypeColor = document.getElementById(id).childNodes[1].style.background;
-            var newIssueTypeName = document.getElementById(id).childNodes[3].innerText;
-            
-            document.getElementById(id).childNodes[1].style.background = document.getElementById("issue-type-box").style.background;
-            document.getElementById("issue-type-box").style.background = newTypeColor;
-
-            document.getElementById(id).childNodes[3].innerText = document.getElementById("issue-type-name").innerText;
-            document.getElementById("issue-type-name").innerText = newIssueTypeName;
-
-            document.getElementById(id).id = document.getElementById("issue-type-id").innerText + " type";
-            document.getElementById("issue-type-id").innerText = issueTypeId.id;
         })
         .catch(error => console.error('Unable to update item.', error)); 
 }
@@ -125,18 +116,10 @@ function StatusUpdateHandler(event) {
         })
         .then(data => {
             if (data == null) return;
+
+            updateDropdown(id, "status");
+
             postChange(data);
-            var newTypeColor = document.getElementById(id).childNodes[1].style.background;
-            var newIssueTypeName = document.getElementById(id).childNodes[3].innerText;
-
-            document.getElementById(id).childNodes[1].style.background = document.getElementById("issue-status-box").style.background;
-            document.getElementById("issue-status-box").style.background = newTypeColor;
-
-            document.getElementById(id).childNodes[3].innerText = document.getElementById("issue-status-name").innerText;
-            document.getElementById("issue-status-name").innerText = newIssueTypeName;
-
-            document.getElementById(id).id = document.getElementById("issue-status-id").innerText + " status";
-            document.getElementById("issue-status-id").innerText = issueStatusId.id;
         })
         .catch(error => console.error('Unable to update item.', error));
 }
@@ -292,8 +275,6 @@ function getDateString(date) {
 
 function postFile(oFormElement) {
 
-    var resultElement = oFormElement.elements.namedItem("result");
-
     const formData = new FormData(oFormElement);
 
     fetch(`${uri}/${issue.Id}/file`, {
@@ -367,3 +348,10 @@ function validateInput(el) {
 
     return true;
 }
+
+const typeItems = document.querySelectorAll(".type-item");
+const statusItems = document.querySelectorAll(".status-item");
+
+typeItems.forEach(el => { el.addEventListener('click', TypeUpdateHandler) });
+statusItems.forEach(el => { el.addEventListener('click', StatusUpdateHandler) });
+    

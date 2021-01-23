@@ -7,6 +7,9 @@ namespace Project1.ViewModel.Dashboard
     {
         public PieChartModel TypePieChart { get; set; }
         public PieChartModel StatusPieChart { get; set; }
+        public LineChartModel ActivityLineChart { get; set; }
         public ActivityModel Activity { get; set; }
-    }   
+        public JsonChartData JsonChartData { get; set; }
+
+    }
 }

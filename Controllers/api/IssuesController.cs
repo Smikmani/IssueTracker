@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,10 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Azure.Storage.Blobs;
-
 using Project1.Data;
 using Project1.Data.Entities;
-using System.IO;
 
 namespace Project1.Controllers.api
 {
@@ -32,7 +31,6 @@ namespace Project1.Controllers.api
         [HttpPut("{id}/name")]
         public async Task<ActionResult<Change>> PutIssueName(int id, IssueStringProp issueName)
         {
-
             if (issueName == null)
             {
                 return BadRequest();
@@ -71,7 +69,6 @@ namespace Project1.Controllers.api
         [HttpPut("{id}/desc")]
         public async Task<ActionResult<Change>> PutIssueDesc(int id, IssueStringProp issueDesc)
         {
-
             if (issueDesc == null)
             {
                 return BadRequest();
@@ -112,7 +109,6 @@ namespace Project1.Controllers.api
         [HttpPut("{id}/type")]
         public async Task<ActionResult<Change>> PutIssueType(int id, IssueIntProp issueTypeId)
         {
-            
             if (issueTypeId == null)
             {
                 return BadRequest();
@@ -154,7 +150,6 @@ namespace Project1.Controllers.api
         [HttpPut("{id}/status")]
         public async Task<ActionResult<Change>> PutIssueStatus(int id, IssueIntProp issueStatusId)
         {
-           
             if (issueStatusId == null)
             {
                 return BadRequest();
@@ -196,7 +191,6 @@ namespace Project1.Controllers.api
         [HttpPut("{id}/date")]
         public async Task<ActionResult<Change>> PutIssueDueDate(int id, IssueDateProp issueName)
         {
-
             if (issueName == null)
             {
                 return BadRequest();

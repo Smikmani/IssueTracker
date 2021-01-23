@@ -85,6 +85,7 @@ namespace Project1
             services.AddScoped<IProjectsViewModelService, ProjectsViewModelService>();
             services.AddScoped<ICreateViewModelService, CreateViewModelService>();
             services.AddScoped<IIssueViewModelService, IssueViewModelService>();
+            services.AddScoped<IIssuesTableViewModelService, IssueTableViewModelService>();
 
             services.Configure<FormOptions>(options =>
             {
@@ -144,7 +145,6 @@ namespace Project1
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
             });
-            
         }
     }
 }

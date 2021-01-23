@@ -1,9 +1,10 @@
-﻿PUT FORM IN CARD
+﻿IssueTable page displays a message when i use a filter and i reload the page. remove that
 Notifications
 Image thumbnails https://youtu.be/6czpapfDu-c?t=2381
 number of all new issues add last 10 or 30 days
 number of issues marked as done in last 10 or 30 days
 responsive sidebar
+
 
 Manager and admins can add users to their teams and if a user is already assigned to a team then a requested can be made to the manager of that team
 to borrow that member

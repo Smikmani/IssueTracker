@@ -13,6 +13,6 @@ namespace Project1.Interfaces
         Task<List<SelectItem>> GetTypesSelectItems();
         Task<List<SelectItem>> GetStatusSelectItems();
         Task<List<SelectItem>> GetTeamsSelectItems();
-        Task<int> GetUserId();
+        //Task<int> GetUserId();
     }
 }

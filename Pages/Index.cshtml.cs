@@ -20,7 +20,7 @@ namespace Project1
             
         }
         //public List<string> images { get; set; } = new List<string>();
-        public async Task  OnGet()
+        public async Task  OnGetAsync()
         {
             /*string connectionString = Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTION_STRING");
 

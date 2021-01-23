@@ -40,7 +40,7 @@ namespace Project1
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync(CreateViewModel createVM)
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
@@ -52,7 +52,7 @@ namespace Project1
 
             var isValidType = false;
 
-            if(CreateVM.Types.Exists(t => t.Id==createVM.Issue.TypeId))
+            if(CreateVM.Types.Exists(t => t.Id==CreateVM.Issue.TypeId))
             {
                 isValidType = true;
             }
@@ -60,9 +60,9 @@ namespace Project1
 
             if(isValidType)
             {
-                if (CreateVM.Status.Exists(s => s.Id==createVM.Issue.StatusId))
+                if (CreateVM.Status.Exists(s => s.Id==CreateVM.Issue.StatusId))
                 {
-                    await _createVMService.CreateIssue(createVM.Issue);
+                    await _createVMService.CreateIssue(CreateVM.Issue);
                     return RedirectToPage("./Dashboard");
                 }
             }

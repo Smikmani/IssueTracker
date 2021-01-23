@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Project1.Data.Entities;
 using Project1.ViewModel.Shared;
 
-namespace Project1.ViewModel.Issues
+namespace Project1.ViewModel.IssueTable
 {
-    public class IssueViewModel
+    public class IssueTableViewModel
     {
-        public int UserId { get; set; }
-        public Issue Issue { get; set; }
+        public List<IssueTableItemViewModel> Issues { get; set; }
         public List<SelectItem> Types { get; set; }
         public List<SelectItem> Status { get; set; }
-        public List<SelectItem> Teams { get; set; }
+        public SelectItem SelectedType { get; set; }
+        public SelectItem SelectedStatus { get; set; }
 
     }
 }

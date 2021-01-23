@@ -1,0 +1,177 @@
+﻿@page
+@model Project1.IssuesTableModel
+@{
+    ViewData["Title"] = "IssuesTable";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+@section Scripts{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.22/datatables.min.css" />
+
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.22/datatables.min.js"></script>
+    <script>
+        $(document).ready( function () {
+            $('#dataTable').DataTable({ paging: false, info: false, searching: false });
+        });
+    </script>
+    <script type="module" src="~/js/filter.js"></script>
+}
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-info">Issues</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col-5">
+                            <form asp-page-handler="" method="get">
+                                <div class="form-row">
+                                    <div class="col-2 mr-5">
+                                        <label asp-for="Filter.PerPage" class="text-xs text-uppercase control-label font-weight-bold mb-0 text-info "></label>
+                                        <select asp-for="Filter.PerPage" class="form-control">
+                                            <option class="selItem" value="10" >10</option>
+                                            <option class="selItem" value="30">30</option>
+                                            <option class="selItem" value="50">50</option>
+                                        </select>
+                                        <span asp-validation-for="Filter.PerPage" class="text-danger"></span>
+                                    </div>
+                                    <div class="col">
+                                        <label asp-for="Filter.TypeId" class="text-xs text-uppercase control-label font-weight-bold mb-0 text-info"></label>
+                                        <input asp-for="Filter.TypeId" class="form-control" hidden/>
+                                        <div class="dropdown  ">
+                                            <button id="type-btn" class="btn  dropdown-toggle  pt-0 pl-0" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #6e707e;">
+                                                @if (Model.IssueTable.SelectedType != null && Model.IssueTable.SelectedType.Id != 0)
+                                                {
+                                                    <span id="issue-type-id" hidden>@Model.IssueTable.SelectedType.Id</span>
+                                                    <span id="issue-type-box" class="type-box " title="@Model.IssueTable.SelectedType.Name" style="background:@Model.IssueTable.SelectedType.Color"></span>
+                                                    <span id="issue-type-name" class="ml-1 text-left font-weight-bold issue-field align-middle">@Model.IssueTable.SelectedType.Name</span>
+                                                }
+                                                else
+                                                {
+                                                    <span id="issue-type-id" hidden>0</span>
+                                                    <span id="issue-type-box" class="type-box " title="None" ></span>
+                                                    <span id="issue-type-name" class="ml-1 text-left font-weight-bold issue-field align-middle">None</span>
+                                                }
+
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
+                                                @if (Model.IssueTable.SelectedType != null)
+                                                {
+                                                    <a class="dropdown-item type-item" id="0-type">
+                                                        <span class="type-box " title="None" ></span>
+                                                        <span class="ml-1  text-left font-weight-bold issue-field align-middle" style="color: #6e707e;">None</span>
+                                                    </a>
+                                                }
+                                                @foreach (var t in Model.IssueTable.Types)
+                                                {
+                                                    if (t.Id == Model.IssueTable.SelectedType?.Id) continue;
+                                                    <a class="dropdown-item type-item" id="@t.Id-type">
+                                                        <span class="type-box " title="@t.Name" style="background:@t.Color"></span>
+                                                        <span class="ml-1  text-left font-weight-bold issue-field align-middle" style="color: #6e707e;">@t.Name</span>
+                                                    </a>
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <label asp-for="Filter.StatusId" class="text-xs text-uppercase control-label font-weight-bold mb-0 text-info"></label>
+                                        <input asp-for="Filter.StatusId" class="form-control" hidden/>
+                                        <div class="dropdown  ">
+                                            <button id="type-btn" class="btn   dropdown-toggle  pt-0 pl-0" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #6e707e;">
+                                                @if (Model.IssueTable.SelectedStatus != null && Model.IssueTable.SelectedStatus.Id != 0)
+                                                {
+                                                    <span id="issue-status-id" hidden>@Model.IssueTable.SelectedStatus.Id</span>
+                                                    <span id="issue-status-box" class="type-box " title="@Model.IssueTable.SelectedStatus.Name" style="background:@Model.IssueTable.SelectedStatus.Color"></span>
+                                                    <span id="issue-status-name" class="ml-1 text-left font-weight-bold issue-field align-middle">@Model.IssueTable.SelectedStatus.Name</span>
+                                                }
+                                                else
+                                                {
+                                                    <span id="issue-status-id" hidden>0</span>
+                                                    <span id="issue-status-box" class="type-box " title="None" ></span>
+                                                    <span id="issue-status-name" class="ml-1 text-left font-weight-bold issue-field align-middle">None</span>
+                                                }s
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                @if (Model.IssueTable.SelectedStatus != null)
+                                                {
+                                                    <a class="dropdown-item status-item" id="0-status">
+                                                        <span class="type-box " title="None" ></span>
+                                                        <span class="ml-1  text-left font-weight-bold issue-field align-middle" style="color: #6e707e;">None</span>
+                                                    </a>
+                                                }
+                                                @foreach (var s in Model.IssueTable.Status)
+                                                {
+                                                    if (s.Id == Model.IssueTable.SelectedStatus?.Id) continue;
+                                                    <a class="dropdown-item status-item" id="@s.Id-status">
+                                                        <span class="type-box " title="@s.Name" style="background:@s.Color"></span>
+                                                        <span class="ml-1  text-left font-weight-bold issue-field align-middle" style="color: #6e707e;">@s.Name</span>
+                                                    </a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn btn-secondary" style="margin-top:15px;"><i class="fas fa-angle-right"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-7">
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+                            <thead>
+                                <tr role="row"><th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 155px;">Name</th><th class="sorting_desc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 239px;" aria-sort="descending">Status</th><th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 111px;">Due Date</th></tr>
+                            </thead>
+                            <tfoot>
+                                <tr><th rowspan="1" colspan="1">Name</th><th rowspan="1" colspan="1">Status</th><th rowspan="1" colspan="1">Due Date</th></tr>
+                            </tfoot>
+                            <tbody>
+                                @foreach (var i in Model.IssueTable.Issues)
+                                {
+                                    
+                                    <tr role="row" class="odd">
+                                        <td class=""><a asp-page="/Issue" asp-route-id="@i.Id">@i.Name</a></td>
+                                        <td class="sorting_1">@i.Status.Name</td>
+                                        <td>@i.DueDate?.ToString("dd/MM/yyyy")</td>
+                                    </tr>
+                                    
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+
+                        </div>
+                        <div class="col-7">
+                            <ul class="pagination" id="pagin">
+                                <li class="page-item">
+                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                </li>
+                                @for (int i = 1; i <= Model.PageUris.Count; i++)
+                                {
+                                    if (i == Model.CurrentPage)
+                                    {
+                                        <li class="page-item active">
+                                            <a class="page-link" href="@Model.PageUris[i-1]">@i <span class="sr-only">(current)</span></a>
+                                        </li>
+                                        continue;
+                                    }
+                                    <li class="page-item"><a class="page-link" href="@Model.PageUris[i-1]">@i</a></li>
+                                }
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

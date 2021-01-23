@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Project1.Data;
-using Project1.Data.Entities;
 using Project1.Interfaces;
 using Project1.ViewModel.Issues;
 using System.Text.Json;
@@ -20,17 +14,17 @@ namespace Project1
         {
             _issueVMService = issueVMService;
         }
-        public IssueViewModel issueVM { get; set; }
+        public IssueViewModel IssueVM { get; set; }
         public string JsonIssue { get; set; }
         public async Task OnGetAsync(int id)
         {
-            issueVM = await _issueVMService.GetIssueViewModel(id);
+            IssueVM = await _issueVMService.GetIssueViewModel(id);
 
-            if(issueVM.Issue?.Comments != null) issueVM.Issue.Comments.Reverse();
-            if (issueVM.Issue?.Changes != null)  issueVM.Issue.Changes.Reverse();
-            if (issueVM.Issue?.Files != null)  issueVM.Issue.Files.Reverse();
+            if (IssueVM.Issue?.Comments != null) IssueVM.Issue.Comments.Reverse();
+            if (IssueVM.Issue?.Changes != null)  IssueVM.Issue.Changes.Reverse();
+            if (IssueVM.Issue?.Files != null)  IssueVM.Issue.Files.Reverse();
             
-            JsonIssue = JsonSerializer.Serialize(issueVM.Issue);
+            JsonIssue = JsonSerializer.Serialize(IssueVM.Issue);
         }
     }
 }

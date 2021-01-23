@@ -14,5 +14,6 @@ namespace Project1.Interfaces
         Task<ActivityModel> GetActivity(int Days = 15);
         Task<PieChartModel> GetTypePieChartData();
         Task<PieChartModel> GetStatusPieChartData();
+        Task<LineChartModel> GetActivityLineChartData(int Days = 15);
     }
 }

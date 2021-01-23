@@ -1,13 +1,13 @@
 ﻿@page
 @model Project1.IssueModel
 @{
-    if (Model.issueVM.Issue == null)
+    if (Model.IssueVM.Issue == null)
     {
         ViewData["Title"] = "Issue Not Found" ;
     }
     else
     {
-        ViewData["Title"] = "Issue #" + Model.issueVM.Issue.Id;
+        ViewData["Title"] = "Issue #" + Model.IssueVM.Issue.Id;
     }
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
@@ -17,10 +17,9 @@
     <script type="text/javascript">
         var issue =  @Html.Raw(Model.JsonIssue);
     </script>
-    <script type="text/javascript" src="~/js/issue.js"></script>
-
+    <script type="module" src="~/js/issue.js"></script>
 }
-@if( Model.issueVM.Issue==null){
+@if(Model.IssueVM.Issue==null){
     <div class=" container-fluid">
         <div class="row mb-3">
             <h1>This issue does not exist or it has been deleted :(</h1>
@@ -30,8 +29,8 @@
 }
 <div class=" container-fluid">
     <div class="row mb-3">
-        <span class="h4 d-flex align-items-center issue-id font-italic">#@Model.issueVM.Issue.Id</span>
-        <input type="text" name="Name" asp-for="@Model.issueVM.Issue.Name" spellcheck="false" class="h1 issue-field" id="issue-name" onfocusout="NameUpdateHandler(event)" />
+        <span class="h4 d-flex align-items-center issue-id font-italic">#@Model.IssueVM.Issue.Id</span>
+        <input type="text" name="Name" asp-for="@Model.IssueVM.Issue.Name" spellcheck="false" class="h1 issue-field" id="issue-name" onfocusout="NameUpdateHandler(event)" />
     </div>
     <div class="row">
         <div class="col-6">
@@ -41,18 +40,18 @@
                 </div>
                 <div class="card-body d-flex flex-row pt-2 pb-2">
                     <div class="form-group mr-2 mb-0" style="width:25%">
-                        <label asp-for="@Model.issueVM.Issue.Type" class="text-xs text-uppercase control-label font-weight-bold mb-0 text-info"></label>
+                        <label asp-for="@Model.IssueVM.Issue.Type" class="text-xs text-uppercase control-label font-weight-bold mb-0 text-info"></label>
                         <div class="dropdown no-arrow ">
                             <button id="type-btn" class="btn  dropdown-toggle  pt-0 pl-0" type="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #6e707e;">
-                                <span id="issue-type-id" hidden>@Model.issueVM.Issue.Type.Id</span>
-                                <span id="issue-type-box" class="type-box " title="@Model.issueVM.Issue.Type.Name" style="background:@Model.issueVM.Issue.Type.Color"></span>
-                                <span id="issue-type-name" class="ml-1 text-left font-weight-bold issue-field align-middle">@Model.issueVM.Issue.Type.Name</span>
+                                <span id="issue-type-id" hidden>@Model.IssueVM.Issue.Type.Id</span>
+                                <span id="issue-type-box" class="type-box " title="@Model.IssueVM.Issue.Type.Name" style="background: @Model.IssueVM.Issue.Type.Color;"></span>
+                                <span id="issue-type-name" class="ml-1 text-left font-weight-bold issue-field align-middle">@Model.IssueVM.Issue.Type.Name</span>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
-                                @foreach(var t in Model.issueVM.Types) {
-                                    if (t.Id == Model.issueVM.Issue.TypeId) continue;
-                                    <a class="dropdown-item " onclick="TypeUpdateHandler(event)" id="@t.Id-type">
-                                        <span class="type-box " title="@t.Name" style="background:@t.Color"></span>
+                                @foreach(var t in Model.IssueVM.Types) {
+                                    if (t.Id == Model.IssueVM.Issue.TypeId) continue;
+                                    <a class="dropdown-item type-item"  id="@t.Id-type">
+                                        <span class="type-box " title="@t.Name" style="background: @t.Color"></span>
                                         <span class="ml-1  text-left font-weight-bold issue-field align-middle"  style="color: #6e707e;">@t.Name</span>
                                     </a>
                                  }
@@ -61,18 +60,18 @@
                         </div>
                     </div>
                     <div class="form-group mr-2 mb-0" style="width:25%">
-                        <label asp-for="@Model.issueVM.Issue.Status" class="text-xs text-uppercase control-label font-weight-bold mb-0 text-info"></label>
+                        <label asp-for="@Model.IssueVM.Issue.Status" class="text-xs text-uppercase control-label font-weight-bold mb-0 text-info"></label>
                         <div class="dropdown no-arrow ">
                             <button id="type-btn" class="btn  dropdown-toggle  pt-0 pl-0" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #6e707e;">
-                                <span id="issue-status-id" hidden>@Model.issueVM.Issue.Status.Id</span>
-                                <span id="issue-status-box" class="type-box " title="@Model.issueVM.Issue.Status.Name" style="background:@Model.issueVM.Issue.Status.Color"></span>
-                                <span id="issue-status-name" class="ml-1 text-left font-weight-bold issue-field align-middle">@Model.issueVM.Issue.Status.Name</span>
+                                <span id="issue-status-id" hidden>@Model.IssueVM.Issue.Status.Id</span>
+                                <span id="issue-status-box" class="type-box " title="@Model.IssueVM.Issue.Status.Name" style="background:@Model.IssueVM.Issue.Status.Color"></span>
+                                <span id="issue-status-name" class="ml-1 text-left font-weight-bold issue-field align-middle">@Model.IssueVM.Issue.Status.Name</span>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
-                                @foreach (var s in Model.issueVM.Status)
+                                @foreach (var s in Model.IssueVM.Status)
                                 {
-                                    if (s.Id == Model.issueVM.Issue.StatusId) continue;
-                                    <a class="dropdown-item " onclick="StatusUpdateHandler(event)" id="@s.Id-status">
+                                    if (s.Id == Model.IssueVM.Issue.StatusId) continue;
+                                    <a class="dropdown-item status-item"  id="@s.Id-status">
                                         <span class="type-box " title="@s.Name" style="background:@s.Color"></span>
                                         <span class="ml-1  text-left font-weight-bold issue-field align-middle" style="color: #6e707e;">@s.Name</span>
                                     </a>
@@ -83,8 +82,8 @@
                     </div>
                     <div class="form-group mr-2 mb-0" style="width:25%">
 
-                        <label asp-for="@Model.issueVM.Issue.DueDate" class="text-xs text-uppercase control-label font-weight-bold mb-0 text-info"></label>
-                        <input name="DueDate" id="DueDate" value="@Model.issueVM.Issue.DueDate?.ToString("yyyy-MM-dd")" type="date" spellcheck="false" class="form-control font-weight-bold pt-0 issue-date" onchange="DueDateUpdateHandler(event)"/>
+                        <label asp-for="@Model.IssueVM.Issue.DueDate" class="text-xs text-uppercase control-label font-weight-bold mb-0 text-info"></label>
+                        <input name="DueDate" id="DueDate" value="@Model.IssueVM.Issue.DueDate?.ToString("yyyy-MM-dd")" type="date" spellcheck="false" class="form-control font-weight-bold pt-0 issue-date" onchange="DueDateUpdateHandler(event)"/>
                     </div>
                     <div class="form-group mr-2 ml-3 mb-0" style="width:25%">
                         <label class="control-label text-xs text-uppercase font-weight-bold mb-0 pl-0 text-info">Submited By</label>
@@ -102,7 +101,7 @@
                           role="textbox"
                           onfocusout="DescUpdateHandler(event)"
                           contenteditable>
-                        @Model.issueVM.Issue.Description
+                        @Model.IssueVM.Issue.Description
                     </span>
                 </div>
             </div>
@@ -123,7 +122,11 @@
                         </div>
                     </div>
                     <div id="comm-section">
-                        @foreach (var c in Model.issueVM.Issue.Comments)
+                        @if (Model.IssueVM.Issue.Comments.Count == 0)
+                        {
+                            <span id="no-comm">No Comments</span>
+                        }
+                        @foreach (var c in Model.IssueVM.Issue.Comments)
                         {
                             <div class="issue-comm border mb-3 " id="@c.Id">
                                 <div class="d-flex flex-row mb-2 p-2 border-bottom">
@@ -132,7 +135,7 @@
                                     <span class="issue-comm-username mr-auto">@c.UserName</span>
                                     <span class="mr-1 font-weight-bold">At: </span>
                                     <span class="issue-comm-created ">@c.CreationDate</span>
-                                    @if (c.UserId == Model.issueVM.UserId)
+                                    @if (c.UserId == Model.IssueVM.UserId)
                                     {
                                         <button class="btn btn-danger btn-sm ml-2" onclick="deleteComment(@c.Id)"><i class="far fa-trash-alt fa-sm"></i></button>
                                     }
@@ -158,7 +161,11 @@
                 </div>
                 <div class="card-body issue-comms-card">
                     <div id="change-section">
-                        @foreach (var c in Model.issueVM.Issue.Changes)
+                        @if (Model.IssueVM.Issue.Changes.Count == 0)
+                        {
+                            <span id="no-change">No Changes Made</span>
+                        }
+                        @foreach (var c in Model.IssueVM.Issue.Changes)
                         {
                             <div class="issue-comm border mb-3 ">
                                 <div class="d-flex flex-row mb-2 p-2 border-bottom">
@@ -202,12 +209,11 @@
                 </div>
             </form>
             <div id="files-section">
-
-                @if (Model.issueVM.Issue.Files == null)
-                {
-                    <span>No Fille Attached</span>
+               @if (Model.IssueVM.Issue.Files.Count == 0)
+               {
+                    <span id="no-files">No Fille Attached</span>
                 }
-                @foreach (var file in Model.issueVM.Issue.Files)
+                @foreach (var file in Model.IssueVM.Issue.Files)
                 {
                     var ext = file.Uri.Substring(file.Uri.LastIndexOf('.') + 1).ToUpperInvariant();
                     <div class="d-flex flex-row file mb-1" id="file-@file.Id">
@@ -237,7 +243,7 @@
                     </div>
                 }
             </div>
-                    </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-6">

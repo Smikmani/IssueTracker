@@ -201,3 +201,25 @@ body {
 .file{
     font-size: 1.7em;
 }
+
+.page-item.active .page-link {
+    background-color: #36b9cc !important;
+    border-color: #36b9cc !important;
+}
+
+#pagin {
+    margin: 2px 0;
+    white-space: nowrap;
+    justify-content: flex-end;
+}
+
+.page-link {
+    color: #36b9cc !important;
+}
+.page-item.active .page-link {
+    color: #fff !important;
+}
+
+footer {
+    
+}

@@ -5,11 +5,13 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 @section Scripts{
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
-    <script type="text/javascript" src="~/js/doughnut.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.css" />
+    <script type="text/javascript" src="~/js/dashboard.js"></script>
     <script type="text/javascript">
-        getPieChart('type-chart','Types',@Html.Raw(Model.typePieColors),@Model.typePieValues,@Html.Raw(Model.typePieLabels));
-        getPieChart('status-chart','Status',@Html.Raw(Model.statusPieColors),@Model.statusPieValues,@Html.Raw(Model.statusPieLabels));
+        getPieChart('type-chart',@Html.Raw(Model.DashboardVM.JsonChartData.typePieColors),@Model.DashboardVM.JsonChartData.typePieValues,@Html.Raw(Model.DashboardVM.JsonChartData.typePieLabels));
+        getPieChart('status-chart',@Html.Raw(Model.DashboardVM.JsonChartData.statusPieColors),@Model.DashboardVM.JsonChartData.statusPieValues,@Html.Raw(Model.DashboardVM.JsonChartData.statusPieLabels));
+        getLineChart('activity-chart',@Model.DashboardVM.JsonChartData.activityLineValues,@Html.Raw(Model.DashboardVM.JsonChartData.activityLineLabels));
     </script>
 }
 
@@ -19,14 +21,13 @@
     </div>
     <div class="row">
 
-        <!-- Earnings (Monthly) Card Example -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class=" font-weight-bold text-info text-uppercase mb-1">Open Issues</div>
-                            <div class="h4 mb-0 font-weight-bold text-gray-800">@Model.dashboardVM.Activity.OpenIssueCount</div>
+                            <div class="h4 mb-0 font-weight-bold text-gray-800">@Model.DashboardVM.Activity.OpenIssueCount</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-virus fa-3x text-gray-600"></i>
@@ -36,14 +37,13 @@
             </div>
         </div>
 
-        <!-- Earnings (Monthly) Card Example -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="font-weight-bold text-info text-uppercase mb-1">Closed Issues</div>
-                            <div class="h4 mb-0 font-weight-bold text-gray-800">@Model.dashboardVM.Activity.ClosedIssueCount</div>
+                            <div class="h4 mb-0 font-weight-bold text-gray-800">@Model.DashboardVM.Activity.ClosedIssueCount</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-hand-holding-medical fa-3x text-gray-600"></i>
@@ -52,15 +52,14 @@
                 </div>
             </div>
         </div>
-        <!-- Earnings (Monthly) Card Example -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="font-weight-bold text-info text-uppercase mb-1">Recent Issues Added</div>
+                            <div class="font-weight-bold text-info text-uppercase mb-1">Average Issues Added</div>
                             <div class="h4 mb-0 font-weight-bold text-gray-800">
-                                @Model.dashboardVM.Activity.AverageIssuesAdded
+                                @Model.DashboardVM.Activity.AverageIssuesAdded
                             </div>
                         </div>
                         <div class="col-auto">
@@ -71,14 +70,13 @@
             </div>
         </div>
 
-        <!-- Pending Requests Card Example -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="font-weight-bold text-info text-uppercase mb-1">Recent Issues Closed</div>
-                            <div class="h4 mb-0 font-weight-bold text-gray-800">@Model.dashboardVM.Activity.AverageIssuesClosed</div>
+                            <div class="font-weight-bold text-info text-uppercase mb-1">Average Issues Closed</div>
+                            <div class="h4 mb-0 font-weight-bold text-gray-800">@Model.DashboardVM.Activity.AverageIssuesClosed</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-pump-medical fa-3x text-gray-600"></i>
@@ -90,61 +88,54 @@
     </div>
     <div class="row">
 
-        <!-- Area Chart -->
-        <div class="col-xl-8 col-lg-7">
+        <div class="col-xl-6 col-lg-7">
             <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-info">Earnings Overview</h6>
-
+                    <h6 class="m-0 font-weight-bold text-info">Activity</h6>
                 </div>
-                <!-- Card Body -->
                 <div class="card-body">
-
+                    <div class="pt-4 pb-2">
+                        <canvas id="activity-chart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Pie Chart -->
-        <div class="col-xl-2 col-lg-5">
+        <div class="col-xl-3 col-lg-5">
             <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-info">Status</h6>
                 </div>
-                <!-- Card Body -->
                 <div class="card-body">
                     <div class="pt-4 pb-2">
                         <canvas width="400" height="400" id="status-chart"></canvas>
                     </div>
                     <div class="mt-4 text-center small">
-                        @for (int s = 0; s < Model.dashboardVM.StatusPieChart.Colors.Count(); s++)
+                        @for (int s = 0; s < Model.DashboardVM.StatusPieChart.Colors.Count(); s++)
                         {
                             <span class="mr-2">
-                                <i class="fas fa-circle " style="color:@Model.dashboardVM.StatusPieChart.Colors[s]"></i> @Model.dashboardVM.StatusPieChart.Labels[s]
+                                <i class="fas fa-circle " style="color:@Model.DashboardVM.StatusPieChart.Colors[s]"></i> @Model.DashboardVM.StatusPieChart.Labels[s]
                             </span>
                         }
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-2 col-lg-5">
+        <div class="col-xl-3 col-lg-5">
             <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-info">Types</h6>
 
                 </div>
-                <!-- Card Body -->
                 <div class="card-body">
                     <div class="pt-4 pb-2">
                         <canvas width="400" height="400" id="type-chart"></canvas>
                     </div>
                     <div class="mt-4 text-center small">
-                        @for (int s = 0; s < Model.dashboardVM.TypePieChart.Colors.Count(); s++)
+                        @for (int s = 0; s < Model.DashboardVM.TypePieChart.Colors.Count(); s++)
                         {
                             <span class="mr-2">
-                                <i class="fas fa-circle " style="color:@Model.dashboardVM.TypePieChart.Colors[s]"></i> @Model.dashboardVM.TypePieChart.Labels[s]
+                                <i class="fas fa-circle " style="color:@Model.DashboardVM.TypePieChart.Colors[s]"></i> @Model.DashboardVM.TypePieChart.Labels[s]
                             </span>
                         }
                     </div>
